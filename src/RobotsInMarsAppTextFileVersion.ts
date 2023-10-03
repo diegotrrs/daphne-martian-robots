@@ -1,5 +1,5 @@
 import RobotsInMarsSimulator from "./simulator/RobotsInMarsSimulator"
-import { Direction, GridDimensions, RobotFinalPosition, RobotInitialPosition, RobotInstruction, RobotMovementInformation } from "./simulator/types"
+import { DirectionId, GridDimensions, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./simulator/types"
 import * as fs from 'fs/promises'
 
 /**
@@ -39,7 +39,7 @@ class RobotsInMarsAppTextFileVersion {
   }
 
   private parseGridDimensions(input: string): GridDimensions {
-    if (!/^\d+ \d+$/.test(input)) throw Error(`Incorrect format for dimensions. Input received ${input}. Excepted /^\d+ \d+$/`)
+    if (!/^\d+ \d+$/.test(input)) throw Error(`Incorrect format for dimensions. Input received ${input}. Excepted /^d+ d+$/`)
   
     const tokens = input.split(" ")
   
@@ -49,30 +49,32 @@ class RobotsInMarsAppTextFileVersion {
     }
   }
 
-  private parseRobotInstructions(input: string): RobotInstruction [] {
+  private parseRobotInstructions(input: string): RobotInstructionId [] {
     const chars = [ ...input ]
-    const validCommands = Object.values(RobotInstruction)
+    const validInstructions = Object.values(RobotInstructionId)
     for (const char of chars) {
-      if (!validCommands.includes(char as RobotInstruction)) throw Error(`Incorrect format for robot instructions. Input received ${input}. Valid options ${validCommands}`)
+      if (!validInstructions.includes(char as RobotInstructionId)) throw Error(`Incorrect format for robot instructions. Input received ${input}. Valid options ${validInstructions}`)
     }
   
-    return chars as RobotInstruction []
+    return chars as RobotInstructionId []
   }
 
   private parseRobotInitialPosition(input: string): RobotInitialPosition {
     const tokens = input.split(" ")
     const [ xCoordinate, yCoordinate, direction ] = tokens
 
-    if (isNaN(Number(xCoordinate)) || isNaN(Number(yCoordinate))) throw Error(`Incorrect format for initial position. Input received ${input}. Excepted /^\d+$/`)
+    if (isNaN(Number(xCoordinate)) || isNaN(Number(yCoordinate))) throw Error(`Incorrect format for initial position. Input received ${input}. Excepted /^d+$/`)
 
-    const validDirections = Object.values(Direction)
+    const validDirections = Object.values(DirectionId)
 
-    if (!validDirections.includes(direction as Direction)) throw Error(`Incorrect format for directions. Input received ${input}. Valid options ${validDirections}`)
+    if (!validDirections.includes(direction as DirectionId)) throw Error(`Incorrect format for directions. Input received ${input}. Valid options ${validDirections}`)
     
     return {
-      x: Number.parseInt(xCoordinate),
-      y: Number.parseInt(yCoordinate),
-      direction: direction as Direction,
+      coordinates: {
+        x: Number.parseInt(xCoordinate),
+        y: Number.parseInt(yCoordinate),
+      },      
+      direction: direction as DirectionId,
     }
   }
 
@@ -83,7 +85,7 @@ class RobotsInMarsAppTextFileVersion {
   }
 
   private async writeRobotsFinalPositions(outputFilePath: string, positions: RobotFinalPosition[]) {    
-    const finalPositionsText = positions.map(p => `${p.x} ${p.y} ${p.direction} ${p.isLost ? "LOST": ""}`)
+    const finalPositionsText = positions.map(p => `${p.coordinates.x} ${p.coordinates.y} ${p.direction} ${p.isLost ? "LOST": ""}`)
     const content = finalPositionsText.join('\n')    
     await fs.writeFile(outputFilePath, content, 'utf8')
   }

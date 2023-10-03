@@ -1,20 +1,16 @@
-import { Direction, GridDimensions, RobotFinalPosition, RobotInitialPosition, RobotInstruction, RobotMovementInformation } from "./types"
+import { MoveForward, Turn90DegreesLeft, Turn90DegreesRight } from "./robotInstructions"
+import { DirectionId, GridDimensions, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./types"
 
 enum CellState {
   CLEAN = 0,
   SCENTED = 1
 }
 
-const degreesPerTurn = {
-  [RobotInstruction.Turn_90_Degress_Right]: 90,
-  [RobotInstruction.Turn_90_Degress_Left]: -90,
-}
-
 const degreesPerDirection = {
-  [Direction.North]: 0,
-  [Direction.East]: 90,
-  [Direction.South]: 180,
-  [Direction.West]: 270,
+  [DirectionId.North]: 0,
+  [DirectionId.East]: 90,
+  [DirectionId.South]: 180,
+  [DirectionId.West]: 270,
 }
 
 /**
@@ -25,6 +21,13 @@ const degreesPerDirection = {
 class RobotsInMarsSimulator {
   private robotsMovementInformation: RobotMovementInformation [] = []
   private grid: CellState [][] = []
+
+  // All of the possible instructions robots can respond to
+  private instructions = [
+    new MoveForward(),
+    new Turn90DegreesRight(),
+    new Turn90DegreesLeft(),
+  ]
 
   constructor(gridDimensions: GridDimensions, robotsMovementInformation: RobotMovementInformation []){
     this.createMarsGrid(gridDimensions.width, gridDimensions.height)
@@ -41,56 +44,46 @@ class RobotsInMarsSimulator {
     }
   }
 
-  private executeRobotInstructions(initialPosition: RobotInitialPosition, instructions: RobotInstruction []){
-    const { x, y, direction } = initialPosition    
-    let newX = x, newY = y
-    let currentRotation = degreesPerDirection[direction]
+  private executeRobotInstructions(initialPosition: RobotInitialPosition, instructions: RobotInstructionId []){
+    let { x: newX, y: newY } = initialPosition.coordinates
+    let currentDegrees = degreesPerDirection[initialPosition.direction]
     
-    instructions.forEach(instruction => {
-      if(instruction === RobotInstruction.Move_Forward){
-        switch (currentRotation) {
-          case 0:
-            newY += 1
-            break;
-          case 90:
-            newX += 1
-            break;
-          case 180:
-            newY -= 1
-            break;
-          case 270:
-            newX -= 1
-            break;
-        }
-      } else {
-        currentRotation += degreesPerTurn[instruction]
-      }
-     
-      // Ensure currentRotation stays within 0-359 range.  
-      currentRotation = (currentRotation + 360) % 360;     
-    });
+    instructions.forEach(instructionId => {
+      const instruction = this.instructions.find(instruction => instruction.id === instructionId)
+      
+      if (!instruction) throw new Error("Instruction not found")
+
+      const results = instruction.execute({ x: newX, y: newY }, currentDegrees)      
+      newX = results.coordinates.x
+      newY = results.coordinates.y
+      currentDegrees = results.degrees
+    })
 
     return {
-      x: newX,
-      y: newY,
-      direction: this.getDirectionFromDegree(currentRotation) as Direction,
+      coordinates: {
+        x: newX,
+        y: newY,
+      },      
+      direction: this.getDirectionFromDegree(currentDegrees) as DirectionId,
       isLost: false,
     }
   }
 
   private getDirectionFromDegree(degree: number) {
-    for (const [direction, value] of Object.entries(degreesPerDirection)) {
+    for (const [ direction, value ] of Object.entries(degreesPerDirection)) {
       if (value === degree) {
-        return direction;
+        return direction
       }
     }
-    throw new Error(`Degree ${degree} not found in degreesPerDirection.`);
+    throw new Error(`Degree ${degree} not found in degreesPerDirection.`)
   }
   
   public run(): RobotFinalPosition[] {
     const finalPositions: RobotFinalPosition [] = []
+
     this.robotsMovementInformation.forEach(robotMovement => {
       const { initialPosition, instructions } = robotMovement
+
       const finalPosition = this.executeRobotInstructions(initialPosition, instructions)
       finalPositions.push(finalPosition)
     })

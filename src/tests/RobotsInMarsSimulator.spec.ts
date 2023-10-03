@@ -1,5 +1,5 @@
 import RobotsInMarsSimulator from "../simulator/RobotsInMarsSimulator"
-import { Direction, RobotInstruction } from "../simulator/types"
+import { DirectionId, RobotInstructionId } from "../simulator/types"
 
 describe("When there is one robot and it does not move",  () => {  
   it("should return the same position when no instructions received", async () => {
@@ -8,12 +8,12 @@ describe("When there is one robot and it does not move",  () => {
       height: 2,
     }, [
       {
-        initialPosition: { x: 0, y: 0, direction: Direction.North },
-        instructions: []
+        initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
+        instructions: [],
       },
     ])
     const finalPositions = simulator.run()
-    expect(finalPositions).toEqual([ { x: 0, y: 0, direction: Direction.North, isLost: false } ])
+    expect(finalPositions).toEqual([ { coordinates: { x: 0, y: 0 }, direction: DirectionId.North, isLost: false } ])
   })
 })
 
@@ -24,70 +24,70 @@ describe("When there is one robot and it only turns",  () => {
       height: 2,
     }, [
       {
-        initialPosition: { x: 0, y: 0, direction: Direction.North },
+        initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
         instructions: [
-          RobotInstruction.Turn_90_Degress_Left,          
-        ]
+          RobotInstructionId.Turn_90_Degress_Left,          
+        ],
       },
     ])
     const finalPositions = simulator.run()
-    expect(finalPositions).toEqual([ { x: 0, y: 0, direction: Direction.West, isLost: false } ])
+    expect(finalPositions).toEqual([ { coordinates: { x: 0, y: 0 }, direction: DirectionId.West, isLost: false } ])
   })
 
-  it("should return the same position but the opposite direction after doing a 270 rotation", async () => {
+  it("should return the same position but the opposite direction after doing a 270 degrees rotation", async () => {
     const simulator = new RobotsInMarsSimulator({
       width: 2,
       height: 2,
     }, [
       {
-        initialPosition: { x: 0, y: 0, direction: Direction.North },
+        initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
         instructions: [
-          RobotInstruction.Turn_90_Degress_Left,
-          RobotInstruction.Turn_90_Degress_Left,
-          RobotInstruction.Turn_90_Degress_Left,
-        ]
+          RobotInstructionId.Turn_90_Degress_Left,
+          RobotInstructionId.Turn_90_Degress_Left,
+          RobotInstructionId.Turn_90_Degress_Left,
+        ],
       },
     ])
     const finalPositions = simulator.run()
-    expect(finalPositions).toEqual([ { x: 0, y: 0, direction: Direction.East, isLost: false } ])
+    expect(finalPositions).toEqual([ { coordinates: { x: 0, y: 0 }, direction: DirectionId.East, isLost: false } ])
   })
 
-  it("should return the same position when the robot does a 360 rotation.", async () => {
+  it("should return the same position when the robot does a 360 degrees rotation.", async () => {
     const simulator = new RobotsInMarsSimulator({
       width: 2,
       height: 2,
     }, [
       {
-        initialPosition: { x: 0, y: 0, direction: Direction.North },
+        initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
         instructions: [
-          RobotInstruction.Turn_90_Degress_Left,
-          RobotInstruction.Turn_90_Degress_Left,
-          RobotInstruction.Turn_90_Degress_Left,
-          RobotInstruction.Turn_90_Degress_Left,
-        ]
+          RobotInstructionId.Turn_90_Degress_Left,
+          RobotInstructionId.Turn_90_Degress_Left,
+          RobotInstructionId.Turn_90_Degress_Left,
+          RobotInstructionId.Turn_90_Degress_Left,
+        ],
       },
     ])
     const finalPositions = simulator.run()
-    expect(finalPositions).toEqual([ { x: 0, y: 0, direction: Direction.North, isLost: false } ])
+    expect(finalPositions).toEqual([ { coordinates: { x: 0, y: 0 }, direction: DirectionId.North, isLost: false } ])
   })
 })
 
 describe("When there is one robot and it only moves",  () => {  
-  it("should return the correct position when no instructions received", async () => {
+  it("should return the correct position when only moving forward", async () => {
     const simulator = new RobotsInMarsSimulator({
       width: 2,
       height: 2,
     }, [
       {
-        initialPosition: { x: 0, y: 0, direction: Direction.North },
+        initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
         instructions: [
-          RobotInstruction.Move_Forward,
-          RobotInstruction.Move_Forward
-        ]
+          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forward,
+        ],
       },
     ])
     const finalPositions = simulator.run()
-    expect(finalPositions).toEqual([ { x: 0, y: 2, direction: Direction.North, isLost: false } ])
+    expect(finalPositions).toEqual([ { coordinates: { x: 0, y: 2 }, direction: DirectionId.North, isLost: false } ])
   })
 })
 
@@ -98,25 +98,25 @@ describe("When there is one robot and it moves and turns",  () => {
       height: 5,
     }, [
       {
-        initialPosition: { x: 2, y: 3, direction: Direction.North },
+        initialPosition: { coordinates: { x: 2, y: 3 }, direction: DirectionId.North },
         instructions: [          
-          RobotInstruction.Move_Forward,
-          RobotInstruction.Turn_90_Degress_Right,
-          RobotInstruction.Move_Forward,
-          RobotInstruction.Move_Forward,
-          RobotInstruction.Turn_90_Degress_Right,
-          RobotInstruction.Move_Forward,          
-          RobotInstruction.Turn_90_Degress_Right,
-          RobotInstruction.Move_Forward,
-          RobotInstruction.Move_Forward,
-          RobotInstruction.Turn_90_Degress_Left,
-          RobotInstruction.Move_Forward,
-          RobotInstruction.Move_Forward,
-        ]
+          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Turn_90_Degress_Right,
+          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Turn_90_Degress_Right,
+          RobotInstructionId.Move_Forward,          
+          RobotInstructionId.Turn_90_Degress_Right,
+          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Turn_90_Degress_Left,
+          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forward,
+        ],
       },
     ])
     const finalPositions = simulator.run()
-    expect(finalPositions).toEqual([ { x: 2, y: 1, direction: Direction.South, isLost: false } ])
+    expect(finalPositions).toEqual([ { coordinates: { x: 2, y: 1 }, direction: DirectionId.South, isLost: false } ])
   })
 })
 

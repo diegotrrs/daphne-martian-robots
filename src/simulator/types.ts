@@ -1,10 +1,10 @@
-export enum RobotInstruction {
+export enum RobotInstructionId {
   Turn_90_Degress_Right = "R",
   Turn_90_Degress_Left = "L",
   Move_Forward = "F",
 }
 
-export enum Direction {
+export enum DirectionId {
   North = "N",
   West = "W",
   South = "S",
@@ -13,13 +13,17 @@ export enum Direction {
 
 export type RobotMovementInformation = {
   initialPosition: RobotInitialPosition,
-  instructions: RobotInstruction[],
+  instructions: RobotInstructionId[],
+}
+
+export type Coordinates = {
+  x: number,
+  y: number,
 }
 
 export type RobotInitialPosition = {
-  x: number,
-  y: number,
-  direction: Direction,  
+  coordinates: Coordinates,
+  direction: DirectionId,  
 }
 
 export type RobotFinalPosition = RobotInitialPosition & {
