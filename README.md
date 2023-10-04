@@ -4,7 +4,12 @@ This repository includes the code for Daphne's coding challenge. It's a simulato
 
 # How to run
 
-Run the following commands
+Run the following commands from the root folder
+
+```
+npm run install
+```
+
 ```
 npm run build && npm run start
 ```
