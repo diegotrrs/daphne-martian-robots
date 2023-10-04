@@ -15,20 +15,22 @@ class RobotsInMarsAppTextFileVersion {
   }
 
   public async start (){   
-    const lines = await this.readInputFileContent(this.inputFilePath)
+    const linesFromFile = await this.readInputFileContent(this.inputFilePath)
 
-    if (!lines) throw Error('The entry file is empty.')
+    if (!linesFromFile) throw Error('The entry file is empty.')
+
+    const nonEmptyLines = linesFromFile.filter(l => l !== "")
     
-    const gridDimensions: GridDimensions = this.parseGridDimensions(lines[0])
+    const gridDimensions: GridDimensions = this.parseGridDimensions(nonEmptyLines[0])
     const robotsMovementInformation: RobotMovementInformation [] = []
 
     // Ignore the first line and populate the movement information for each robot.
     // The movement information for each group comes in two lines: the initial position and then the instructions.
-    for (let i = 1; i < lines.length; i+= 2) {
+    for (let i = 1; i < nonEmptyLines.length; i+= 2) {
       robotsMovementInformation.push(
         {
-          initialPosition: this.parseRobotInitialPosition(lines[i]),
-          instructions: this.parseRobotInstructions(lines[i + 1]),
+          initialPosition: this.parseRobotInitialPosition(nonEmptyLines[i]),
+          instructions: this.parseRobotInstructions(nonEmptyLines[i + 1]),
         }
       )    
     }
@@ -44,8 +46,8 @@ class RobotsInMarsAppTextFileVersion {
     const tokens = input.split(" ")
   
     return {
-      width: parseInt(tokens[0]),
-      height: parseInt(tokens[1]),
+      width: parseInt(tokens[0]) + 1,
+      height: parseInt(tokens[1]) + 1,
     }
   }
 

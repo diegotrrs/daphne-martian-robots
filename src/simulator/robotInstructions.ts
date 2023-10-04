@@ -1,10 +1,8 @@
 import { Coordinates, RobotInstructionId } from "./types"
-
 interface Instruction {
   id: RobotInstructionId,
   execute: (coordinates: Coordinates, degrees: number) => { coordinates: Coordinates, degrees: number },
 }
-
 export class MoveForward implements Instruction {
   id: RobotInstructionId = RobotInstructionId.Move_Forward
   
@@ -12,7 +10,7 @@ export class MoveForward implements Instruction {
     const newCoordinates = { ...coordinates }
     switch (degrees) {
       case 0:
-        newCoordinates.y += 1         
+        newCoordinates.y += 1
         break
       case 90:
         newCoordinates.x += 1
@@ -40,7 +38,7 @@ export class Turn90DegreesRight implements Instruction {
 
     // Ensures that we only get degrees between 0 and 360.
     // For example: 450 would be converted to converted to 90
-    if (newDegrees > 360){
+    if (newDegrees >= 360){
       newDegrees = newDegrees % 360
     }
 

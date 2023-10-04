@@ -1,7 +1,7 @@
 import { MoveForward, Turn90DegreesLeft, Turn90DegreesRight } from "./robotInstructions"
 import { DirectionId, GridDimensions, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./types"
 
-enum CellState {
+export enum CellState {
   CLEAN = 0,
   SCENTED = 1
 }
@@ -29,8 +29,8 @@ class RobotsInMarsSimulator {
     new Turn90DegreesLeft(),
   ]
 
-  constructor(gridDimensions: GridDimensions, robotsMovementInformation: RobotMovementInformation []){
-    this.createMarsGrid(gridDimensions.width, gridDimensions.height)
+  constructor(gridDimensions: GridDimensions, robotsMovementInformation: RobotMovementInformation []){    
+    this.createMarsGrid(gridDimensions.width, gridDimensions.height)    
     this.robotsMovementInformation = robotsMovementInformation
   }
 
@@ -44,28 +44,72 @@ class RobotsInMarsSimulator {
     }
   }
 
-  private executeRobotInstructions(initialPosition: RobotInitialPosition, instructions: RobotInstructionId []){
-    let { x: newX, y: newY } = initialPosition.coordinates
+  public getGridCellState(x: number, y: number): CellState {
+    return this.grid[x][y]
+  }
+
+  private executeRobotInstructions(initialPosition: RobotInitialPosition, instructions: RobotInstructionId [], robotIndex: number){
+    let { x: currentX, y: currentY } = initialPosition.coordinates
     let currentDegrees = degreesPerDirection[initialPosition.direction]
+    const gridHeight = this.grid.length
+    const gridWidth = this.grid[0].length
+    let isLost = false
     
-    instructions.forEach(instructionId => {
+    for (const instructionId of instructions) {
       const instruction = this.instructions.find(instruction => instruction.id === instructionId)
-      
+
       if (!instruction) throw new Error("Instruction not found")
 
-      const results = instruction.execute({ x: newX, y: newY }, currentDegrees)      
-      newX = results.coordinates.x
-      newY = results.coordinates.y
+      // Ignore the rest of the instructions if the robot got lost previously
+      if(isLost){
+        break;
+      }
+
+      const results = instruction.execute({ x: currentX, y: currentY }, currentDegrees)
+      
+      // Update degrees
       currentDegrees = results.degrees
-    })
+
+      const isTheRobotStandingOnScentedCell  = this.grid[currentX][currentY] === CellState.SCENTED
+  
+      const wouldRobotFallFromtheNorthSide = results.coordinates.y >= gridHeight
+      const wouldRobotFallFromtheSouthSide = results.coordinates.y < 0
+      const wouldRobotFallFromtheEastSide = results.coordinates.x >= gridWidth
+      const wouldRobotFallFromtheWestSide = results.coordinates.x < 0
+      const wouldRobotFall = wouldRobotFallFromtheNorthSide || wouldRobotFallFromtheSouthSide || wouldRobotFallFromtheEastSide || wouldRobotFallFromtheWestSide
+
+      if(isTheRobotStandingOnScentedCell && wouldRobotFall){        
+        continue
+      }
+
+      if (wouldRobotFall){
+        this.grid[currentX][currentY] = CellState.SCENTED
+        isLost = true
+
+        // Leave the robot in the last save position
+        if (wouldRobotFallFromtheNorthSide){
+          currentY = gridHeight - 1
+        } else if (wouldRobotFallFromtheSouthSide) {
+          currentY = 0
+        } else if (wouldRobotFallFromtheEastSide) {
+          currentX = gridWidth - 1
+        } else if (wouldRobotFallFromtheWestSide){
+          currentX = 0
+        }
+
+      } else {
+        currentX = results.coordinates.x
+        currentY = results.coordinates.y
+      }
+    }
 
     return {
       coordinates: {
-        x: newX,
-        y: newY,
+        x: currentX,
+        y: currentY,
       },      
       direction: this.getDirectionFromDegree(currentDegrees) as DirectionId,
-      isLost: false,
+      isLost,
     }
   }
 
@@ -78,13 +122,17 @@ class RobotsInMarsSimulator {
     throw new Error(`Degree ${degree} not found in degreesPerDirection.`)
   }
   
+  /**
+   * Iterates over all of the movement instructions for all robots and executes them.
+   * @returns A list of Final positions for all robots
+   */
   public run(): RobotFinalPosition[] {
     const finalPositions: RobotFinalPosition [] = []
 
-    this.robotsMovementInformation.forEach(robotMovement => {
+    this.robotsMovementInformation.forEach((robotMovement, i) => {
       const { initialPosition, instructions } = robotMovement
 
-      const finalPosition = this.executeRobotInstructions(initialPosition, instructions)
+      const finalPosition = this.executeRobotInstructions(initialPosition, instructions, i)
       finalPositions.push(finalPosition)
     })
     return finalPositions
