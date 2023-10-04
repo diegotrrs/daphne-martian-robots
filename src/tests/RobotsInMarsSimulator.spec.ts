@@ -92,7 +92,7 @@ describe("When there is one robot and it ONLY MOVES",  () => {
 })
 
 describe("When there is one robot and it around moving back to its original position",  () => {  
-  it("should return the correct position when only moving forward", async () => {
+  it("should return the original position", async () => {
     const simulator = new RobotsInMarsSimulator({
       x: 5,
       y: 3,
