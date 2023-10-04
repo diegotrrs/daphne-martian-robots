@@ -52,7 +52,6 @@ describe("When there is one robot and it ONLY TURNS",  () => {
     expect(finalPositions).toEqual([ { coordinates: { x: 0, y: 0 }, direction: DirectionId.East, isLost: false } ])
   })
 
-  
   it("should return the same position when the robot does a 360 degrees rotation.", async () => {
     const simulator = new RobotsInMarsSimulator({
       x: 1,
@@ -116,7 +115,6 @@ describe("When there is one robot and it around moving back to its original posi
     expect(finalPositions).toEqual([ { coordinates: { x: 1, y: 1 }, direction: DirectionId.East, isLost: false } ])
   })
 })
-
 
 describe("When there is one robot and it MOVES AND TURNS",  () => {  
   it("should return the correct position and direction after finishing its trip", async () => {

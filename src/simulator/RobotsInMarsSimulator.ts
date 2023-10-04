@@ -50,7 +50,7 @@ class RobotsInMarsSimulator {
     return this.grid[x][y]
   }
 
-  private executeRobotInstructions(initialPosition: RobotInitialPosition, instructions: RobotInstructionId [], robotIndex: number){
+  private executeRobotInstructions(initialPosition: RobotInitialPosition, instructions: RobotInstructionId []){
     let { x: currentX, y: currentY } = initialPosition.coordinates
     let currentDegrees = degreesPerDirection[initialPosition.direction]
     const gridHeight = this.grid.length
@@ -72,7 +72,7 @@ class RobotsInMarsSimulator {
 
       // Ignore the rest of the instructions if the robot got lost previously
       if (isLost){
-        break;
+        break
       }
 
       const results = instruction.execute({ x: currentX, y: currentY }, currentDegrees)
@@ -88,7 +88,7 @@ class RobotsInMarsSimulator {
       const wouldRobotFallFromtheWestSide = results.coordinates.x < 0
       const wouldRobotFall = wouldRobotFallFromtheNorthSide || wouldRobotFallFromtheSouthSide || wouldRobotFallFromtheEastSide || wouldRobotFallFromtheWestSide
 
-      if(isTheRobotStandingOnScentedCell && wouldRobotFall){        
+      if (isTheRobotStandingOnScentedCell && wouldRobotFall){        
         continue
       }
 
@@ -139,10 +139,10 @@ class RobotsInMarsSimulator {
   public run(): RobotFinalPosition[] {
     const finalPositions: RobotFinalPosition [] = []
 
-    this.robotsMovementInformation.forEach((robotMovement, i) => {
+    this.robotsMovementInformation.forEach((robotMovement) => {
       const { initialPosition, instructions } = robotMovement
 
-      const finalPosition = this.executeRobotInstructions(initialPosition, instructions, i)
+      const finalPosition = this.executeRobotInstructions(initialPosition, instructions)
       finalPositions.push(finalPosition)
     })
     return finalPositions
