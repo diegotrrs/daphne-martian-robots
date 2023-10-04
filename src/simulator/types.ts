@@ -29,8 +29,3 @@ export type RobotInitialPosition = {
 export type RobotFinalPosition = RobotInitialPosition & {
   isLost: boolean,
 }
-
-export type GridDimensions = {
-  width: number,
-  height: number,
-}

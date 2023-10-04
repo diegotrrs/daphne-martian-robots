@@ -1,4 +1,9 @@
 import { Coordinates, RobotInstructionId } from "./types"
+
+/**
+ * Represents an Instruction a robot can respond to. It receives the current coordinates and degrees of the robot and
+ * it returns the new coordinates and degree. Some Instructions modify the degree other ones modify the coordinates.
+ */
 interface Instruction {
   id: RobotInstructionId,
   execute: (coordinates: Coordinates, degrees: number) => { coordinates: Coordinates, degrees: number },

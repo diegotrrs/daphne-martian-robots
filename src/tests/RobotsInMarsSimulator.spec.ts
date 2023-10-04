@@ -4,8 +4,8 @@ import { DirectionId, RobotFinalPosition, RobotInstructionId } from "../simulato
 describe("When there is one robot and it does NOT MOVE OR TURN",  () => {  
   it("should return the same position when no instructions received", async () => {
     const simulator = new RobotsInMarsSimulator({
-      width: 2,
-      height: 2,
+      x: 1,
+      y: 1,
     }, [
       {
         initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
@@ -20,8 +20,8 @@ describe("When there is one robot and it does NOT MOVE OR TURN",  () => {
 describe("When there is one robot and it ONLY TURNS",  () => {  
   it("should return correct position when it does a 90 degrees turn", async () => {
     const simulator = new RobotsInMarsSimulator({
-      width: 2,
-      height: 2,
+      x: 1,
+      y: 1,
     }, [
       {
         initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
@@ -36,8 +36,8 @@ describe("When there is one robot and it ONLY TURNS",  () => {
 
   it("should return the same position but the opposite direction after doing a 270 degrees rotation", async () => {
     const simulator = new RobotsInMarsSimulator({
-      width: 2,
-      height: 2,
+      x: 1,
+      y: 1,
     }, [
       {
         initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
@@ -55,8 +55,8 @@ describe("When there is one robot and it ONLY TURNS",  () => {
   
   it("should return the same position when the robot does a 360 degrees rotation.", async () => {
     const simulator = new RobotsInMarsSimulator({
-      width: 2,
-      height: 2,
+      x: 1,
+      y: 1,
     }, [
       {
         initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
@@ -76,8 +76,8 @@ describe("When there is one robot and it ONLY TURNS",  () => {
 describe("When there is one robot and it ONLY MOVES",  () => {  
   it("should return the correct position when only moving forward", async () => {
     const simulator = new RobotsInMarsSimulator({
-      width: 3,
-      height: 3,
+      x: 2,
+      y: 2,
     }, [
       {
         initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
@@ -95,8 +95,8 @@ describe("When there is one robot and it ONLY MOVES",  () => {
 describe("When there is one robot and it around moving back to its original position",  () => {  
   it("should return the correct position when only moving forward", async () => {
     const simulator = new RobotsInMarsSimulator({
-      width: 6,
-      height: 4,
+      x: 5,
+      y: 3,
     }, [
       {
         initialPosition: { coordinates: { x: 1, y: 1 }, direction: DirectionId.East },
@@ -121,8 +121,8 @@ describe("When there is one robot and it around moving back to its original posi
 describe("When there is one robot and it MOVES AND TURNS",  () => {  
   it("should return the correct position and direction after finishing its trip", async () => {
     const simulator = new RobotsInMarsSimulator({
-      width: 5,
-      height: 5,
+      x: 4,
+      y: 4,
     }, [
       {
         initialPosition: { coordinates: { x: 2, y: 3 }, direction: DirectionId.North },
@@ -151,8 +151,8 @@ describe("When a robot FALLS off from the NORTH SIDE",  () => {
   let simulator: RobotsInMarsSimulator
 
   const gridDimensions = {
-    width: 5,
-    height: 5,
+    x: 4,
+    y: 4,
   }
 
   beforeEach(() => {
@@ -181,8 +181,8 @@ describe("When a robot FALLS off from the SOUTH side",  () => {
   let simulator: RobotsInMarsSimulator
 
   const gridDimensions = {
-    width: 5,
-    height: 5,
+    x: 4,
+    y: 4,
   }
 
   beforeEach(() => {
@@ -211,8 +211,8 @@ describe("When a robot FALLS off from the EAST side",  () => {
   let simulator: RobotsInMarsSimulator
 
   const gridDimensions = {
-    width: 5,
-    height: 5,
+    x: 4,
+    y: 4,
   }
 
   beforeEach(() => {
@@ -241,8 +241,8 @@ describe("When a robot FALLS off from the WEST side",  () => {
   let simulator: RobotsInMarsSimulator
 
   const gridDimensions = {
-    width: 5,
-    height: 5,
+    x: 4,
+    y: 4,
   }
 
   beforeEach(() => {
@@ -272,8 +272,8 @@ describe("When ONE robot FALLS off and ANOTHER one tries to fall",  () => {
   let finalPositions: RobotFinalPosition [] = []
 
   const gridDimensions = {
-    width: 6,
-    height: 4,
+    x: 5,
+    y: 3,
   }
 
   beforeEach(() => {

@@ -1,5 +1,5 @@
 import RobotsInMarsSimulator from "./simulator/RobotsInMarsSimulator"
-import { DirectionId, GridDimensions, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./simulator/types"
+import { Coordinates, DirectionId, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./simulator/types"
 import * as fs from 'fs/promises'
 
 /**
@@ -21,7 +21,7 @@ class RobotsInMarsAppTextFileVersion {
 
     const nonEmptyLines = linesFromFile.filter(l => l !== "")
     
-    const gridDimensions: GridDimensions = this.parseGridDimensions(nonEmptyLines[0])
+    const topRightCoordinates: Coordinates = this.parseTopRightCoordinate(nonEmptyLines[0])
     const robotsMovementInformation: RobotMovementInformation [] = []
 
     // Ignore the first line and populate the movement information for each robot.
@@ -35,19 +35,19 @@ class RobotsInMarsAppTextFileVersion {
       )    
     }
 
-    const simulator = new RobotsInMarsSimulator(gridDimensions, robotsMovementInformation)
+    const simulator = new RobotsInMarsSimulator(topRightCoordinates, robotsMovementInformation)
     const finalPositions = simulator.run()
     await this.writeRobotsFinalPositions(this.outputFilePath, finalPositions)
   }
 
-  private parseGridDimensions(input: string): GridDimensions {
-    if (!/^\d+ \d+$/.test(input)) throw Error(`Incorrect format for dimensions. Input received ${input}. Excepted /^d+ d+$/`)
+  private parseTopRightCoordinate(input: string): Coordinates {
+    if (!/^\d+ \d+$/.test(input)) throw Error(`Incorrect format for top right corner. Input received ${input}. Excepted /^d+ d+$/`)
   
     const tokens = input.split(" ")
   
     return {
-      width: parseInt(tokens[0]) + 1,
-      height: parseInt(tokens[1]) + 1,
+      x: parseInt(tokens[0]),
+      y: parseInt(tokens[1]),
     }
   }
 

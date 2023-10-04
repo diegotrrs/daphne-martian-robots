@@ -1,10 +1,12 @@
 import { MoveForward, Turn90DegreesLeft, Turn90DegreesRight } from "./robotInstructions"
-import { DirectionId, GridDimensions, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./types"
+import { Coordinates, DirectionId, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./types"
 
 export enum CellState {
   CLEAN = 0,
   SCENTED = 1
 }
+
+const MAX_COORDINATE = 50
 
 const degreesPerDirection = {
   [DirectionId.North]: 0,
@@ -29,8 +31,8 @@ class RobotsInMarsSimulator {
     new Turn90DegreesLeft(),
   ]
 
-  constructor(gridDimensions: GridDimensions, robotsMovementInformation: RobotMovementInformation []){    
-    this.createMarsGrid(gridDimensions.width, gridDimensions.height)    
+  constructor(topRightCoordinates: Coordinates, robotsMovementInformation: RobotMovementInformation []){
+    this.createMarsGrid(topRightCoordinates.x + 1, topRightCoordinates.y + 1)    
     this.robotsMovementInformation = robotsMovementInformation
   }
 
@@ -54,14 +56,22 @@ class RobotsInMarsSimulator {
     const gridHeight = this.grid.length
     const gridWidth = this.grid[0].length
     let isLost = false
-    
+
+    if (initialPosition.coordinates.x > MAX_COORDINATE) {
+      throw new Error(`x coordinate provided (${initialPosition.coordinates.x}) is above the accepted limit (${MAX_COORDINATE}) `)
+    }
+
+    if (initialPosition.coordinates.y > MAX_COORDINATE) {
+      throw new Error(`y coordinate provided (${initialPosition.coordinates.y}) is above the accepted limit (${MAX_COORDINATE}) `)
+    }
+
     for (const instructionId of instructions) {
       const instruction = this.instructions.find(instruction => instruction.id === instructionId)
 
       if (!instruction) throw new Error("Instruction not found")
 
       // Ignore the rest of the instructions if the robot got lost previously
-      if(isLost){
+      if (isLost){
         break;
       }
 
