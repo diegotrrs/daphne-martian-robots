@@ -8,8 +8,8 @@ interface Instruction {
   id: RobotInstructionId,
   execute: (coordinates: Coordinates, degrees: number) => { coordinates: Coordinates, degrees: number },
 }
-export class MoveForward implements Instruction {
-  id: RobotInstructionId = RobotInstructionId.Move_Forward
+export class MoveForwards implements Instruction {
+  id: RobotInstructionId = RobotInstructionId.Move_Forwards
   
   execute(coordinates: Coordinates, degrees: number){
     const newCoordinates = { ...coordinates }

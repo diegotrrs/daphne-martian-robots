@@ -1,7 +1,7 @@
 export enum RobotInstructionId {
   Turn_90_Degress_Right = "R",
   Turn_90_Degress_Left = "L",
-  Move_Forward = "F",
+  Move_Forwards = "F",
 }
 
 export enum DirectionId {

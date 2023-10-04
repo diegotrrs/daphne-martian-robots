@@ -57,8 +57,8 @@ The separation between Instruction and the Simulator provides flexibility when c
 export enum RobotInstructionId {
   Turn_90_Degress_Right = "R",
   Turn_90_Degress_Left = "L",
-  Move_Forward = "F",
-  Move_Backward = "B", // This is the new id
+  Move_Forwards = "F",
+  Move_Backwards = "B", // This is the new id
 }
 
 ```
@@ -67,8 +67,8 @@ export enum RobotInstructionId {
 // In src/simulator/robotInstructions.ts
 // Implement the new class
 
-export class MoveBackward implements Instruction {
-  id: RobotInstructionId = RobotInstructionId.Move_Backward
+export class MoveBackwards implements Instruction {
+  id: RobotInstructionId = RobotInstructionId.Move_Backwards
   
   execute(coordinates: Coordinates, degrees: number){
     const newCoordinates = { ...coordinates }
@@ -102,10 +102,10 @@ export class MoveBackward implements Instruction {
 
 // Note: This could be injected instead of existing in the  RobotsInMarsSimulator class
   private instructions = [
-    new MoveForward(),
+    new MoveForwards(),
     new Turn90DegreesRight(),
     new Turn90DegreesLeft(),
-    new MoveBackward() // new
+    new MoveBackwards() // new
   ]
 ```
 

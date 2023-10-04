@@ -73,7 +73,7 @@ describe("When there is one robot and it ONLY TURNS",  () => {
 })
 
 describe("When there is one robot and it ONLY MOVES",  () => {  
-  it("should return the correct position when only moving forward", async () => {
+  it("should return the correct position when only moving forwards", async () => {
     const simulator = new RobotsInMarsSimulator({
       x: 2,
       y: 2,
@@ -81,8 +81,8 @@ describe("When there is one robot and it ONLY MOVES",  () => {
       {
         initialPosition: { coordinates: { x: 0, y: 0 }, direction: DirectionId.North },
         instructions: [
-          RobotInstructionId.Move_Forward,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
+          RobotInstructionId.Move_Forwards,
         ],
       },
     ])
@@ -101,13 +101,13 @@ describe("When there is one robot and it around moving back to its original posi
         initialPosition: { coordinates: { x: 1, y: 1 }, direction: DirectionId.East },
         instructions: [
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
         ],
       },
     ])
@@ -125,18 +125,18 @@ describe("When there is one robot and it MOVES AND TURNS",  () => {
       {
         initialPosition: { coordinates: { x: 2, y: 3 }, direction: DirectionId.North },
         instructions: [          
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,          
+          RobotInstructionId.Move_Forwards,          
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Left,
-          RobotInstructionId.Move_Forward,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
+          RobotInstructionId.Move_Forwards,
         ],
       },
     ])
@@ -158,7 +158,7 @@ describe("When a robot FALLS off from the NORTH SIDE",  () => {
       {
         initialPosition: { coordinates: { x: 4, y: 4 }, direction: DirectionId.North },
         instructions: [          
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
         ],
       },
     ])
@@ -188,7 +188,7 @@ describe("When a robot FALLS off from the SOUTH side",  () => {
       {
         initialPosition: { coordinates: { x: 4, y: 0 }, direction: DirectionId.South },
         instructions: [
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
         ],
       },
     ])
@@ -218,7 +218,7 @@ describe("When a robot FALLS off from the EAST side",  () => {
       {
         initialPosition: { coordinates: { x: 4, y: 2 }, direction: DirectionId.East },
         instructions: [
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
         ],
       },
     ])
@@ -248,7 +248,7 @@ describe("When a robot FALLS off from the WEST side",  () => {
       {
         initialPosition: { coordinates: { x: 0, y: 1 }, direction: DirectionId.West },
         instructions: [
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
         ],
       },
     ])
@@ -280,17 +280,17 @@ describe("When ONE robot FALLS off and ANOTHER one tries to fall",  () => {
         initialPosition: { coordinates: { x: 3, y: 2 }, direction: DirectionId.North },
         instructions: [
           // FRRFLLFFRRFLL          
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Right,
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Left,
           RobotInstructionId.Turn_90_Degress_Left,
-          RobotInstructionId.Move_Forward,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Right,
           RobotInstructionId.Turn_90_Degress_Right,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Left,
           RobotInstructionId.Turn_90_Degress_Left,
         ],
@@ -301,17 +301,17 @@ describe("When ONE robot FALLS off and ANOTHER one tries to fall",  () => {
         instructions: [
           RobotInstructionId.Turn_90_Degress_Left,
           RobotInstructionId.Turn_90_Degress_Left,
-          RobotInstructionId.Move_Forward,
-          RobotInstructionId.Move_Forward,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
+          RobotInstructionId.Move_Forwards,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Left,
 
           // This one will be ignored
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
 
           // This one will not be ignore
           RobotInstructionId.Turn_90_Degress_Left,
-          RobotInstructionId.Move_Forward,
+          RobotInstructionId.Move_Forwards,
           RobotInstructionId.Turn_90_Degress_Left,
         ],
       },

@@ -1,4 +1,4 @@
-import { MoveForward, Turn90DegreesLeft, Turn90DegreesRight } from "./robotInstructions"
+import { MoveForwards, Turn90DegreesLeft, Turn90DegreesRight } from "./robotInstructions"
 import { Coordinates, DirectionId, RobotFinalPosition, RobotInitialPosition, RobotInstructionId, RobotMovementInformation } from "./types"
 
 export enum CellState {
@@ -26,7 +26,7 @@ class RobotsInMarsSimulator {
 
   // All of the possible instructions robots can respond to
   private instructions = [
-    new MoveForward(),
+    new MoveForwards(),
     new Turn90DegreesRight(),
     new Turn90DegreesLeft(),
   ]
